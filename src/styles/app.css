@@ -1,0 +1,93 @@
+html, body, div, span {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
+
+body {
+    line-height: 1;
+}
+
+header button{
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.loader{
+    position: absolute;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100vh;
+}
+
+.report-header{
+    padding: 10px;
+    margin: 0;
+    text-align: center;
+    border: 1px solid #eeeeee;
+    background-color: orange;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    color: white;
+}
+
+.report{
+    width: 600px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.report .row{
+    display: flex;
+}
+
+.report .col{
+    padding: 10px;
+    border-bottom: 1px solid black;
+    background-color: #eeeeee;
+}
+.col1{
+    flex: 2 0px;
+}
+.col2{
+    flex: 1 auto
+}
+
+.th{
+    background-color: white !important;
+}
+
+/*end reset*/
+
+h3 {
+    font-size: 22px;
+    margin: 10px 0 0;
+}
+
+.btn {
+    border: none;
+    border-radius: 2px;
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    font-size: 16px;
+    outline: 0;
+    padding: 0 2rem;
+    text-transform: uppercase;
+    vertical-align: middle;
+    color: #fff;
+    background-color: #6383a8;
+    text-align: center;
+    letter-spacing: .5px;
+    transition: .2s ease-out;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #6d8cb0
+}

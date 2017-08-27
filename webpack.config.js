@@ -1,5 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
+var precss = require('precss');
 
 module.exports = {
   devtool: 'cheap-module-eval-source-map',
@@ -21,14 +23,23 @@ module.exports = {
         test: /\.js$/,
         loaders: ['eslint'],
         include: [
-          path.resolve(__dirname, "src"),
+          path.resolve(__dirname, 'src')
         ],
       }
     ],
-    loaders: [{
-      test: /\.js$/,
-      loaders: ['react-hot', 'babel'],
-      include: path.join(__dirname, 'src')
-    }]
+    loaders: [
+      {
+        test: /\.js$/,
+        loaders: ['react-hot', 'babel'],
+        include: path.join(__dirname, 'src')
+      },
+      {
+        test:   /\.css$/,
+        loader: 'style-loader!css-loader!postcss-loader'
+      }
+    ]
+  },
+  postcss: function () {
+    return [autoprefixer, precss];
   }
 };

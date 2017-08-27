@@ -1,19 +1,34 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import User from '../components/user';
-import Page from '../components/page';
+import Report from '../components/report';
 import { bindActionCreators } from 'redux';
 import * as pageActions from '../actions/page_actions';
 
 class App extends Component {
+  componentDidMount(){
+    this.props.pageActions.getReport('vacancies');
+    this.props.pageActions.getReport('words');
+  }
+
   render() {
-    let {user,page} = this.props;
-    const { setYear } = this.props.pageActions
+    console.log('report ', this.props);
+    const {vacanciesReport} = this.props;
+    const {getReport} = this.props.pageActions;
+
+    let loadingTemplate;
+
+    if(this.props.vacanciesReport.fetching) {
+      loadingTemplate = <div> Загрузка... </div>
+    }
 
     return (
-      <div>
-        <User name={user.name} />
-        <Page photos={page.photos} year={page.year} setYear={setYear}/>
+
+      <div className="container">
+        <div className="loader">
+          {loadingTemplate}
+        </div>
+        <Report vacanciesReport={vacanciesReport} getReport={getReport} type='vacancies'/>
+        <Report vacanciesReport={vacanciesReport} getReport={getReport} type='words'/>
       </div>
     );
   }
@@ -21,8 +36,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.user,
-    page: state.page
+    vacanciesReport: state.vacanciesReport
   }
 }
 

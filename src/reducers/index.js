@@ -1,5 +1,4 @@
 import {combineReducers} from 'redux';
-import page from './page';
-import user from './user';
+import vacanciesReport from './report';
 
-export default combineReducers({page,user});
+export default combineReducers({vacanciesReport});
