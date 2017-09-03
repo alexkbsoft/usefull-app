@@ -1,28 +1,27 @@
 import {GET_REPORT,
   GET_REPORT_REQUEST,
-  GET_REPORT_SUCCESS} from '../constants/report';
+  GET_REPORT_SUCCESS,
+PROGRESS} from '../constants/report';
 
-import {VacanciesLoader, ReportBuilder} from './utils';
+import {VacanciesLoader, ReportBuilder} from '../utils';
 
-export function getReport(reportType) {
+export function getReports() {
 
   return (dispatch) => {
     dispatch({
-      type: GET_REPORT_REQUEST,
+      type: GET_REPORT_REQUEST
     });
 
+    let loader = new VacanciesLoader();
+
     //получаем вакансии и обрабатываем репорт-редюсером
-    VacanciesLoader.fetchVacancies( ReportBuilder.builders[reportType],
+    loader.loadReport().then(
       ( result ) => {
-
-        let report = Object.keys(result)
-          .map(k => Object.assign({}, { name:k, count: result[k] }) )
-          .sort( (a,b) => b.count - a.count );
-
+        console.log('dispatch result: ', result);
         dispatch(
           {
             type: GET_REPORT_SUCCESS,
-            payload: {report,reportType}
+            payload: result
           })
       });
   }

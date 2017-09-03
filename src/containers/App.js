@@ -3,21 +3,25 @@ import {connect} from 'react-redux';
 import Report from '../components/report';
 import { bindActionCreators } from 'redux';
 import * as pageActions from '../actions/page_actions';
+import {VACANCIES_REPORT, WORDS_REPORT} from '../constants/report';
 
 class App extends Component {
-  componentDidMount(){
-    this.props.pageActions.getReport('vacancies');
-    this.props.pageActions.getReport('words');
+  componentDidMount() {
+    this.props.pageActions.getReports();
+  }
+
+  getReportBtnClick() {
+    this.props.pageActions.getReports(); 
   }
 
   render() {
     console.log('report ', this.props);
-    const {vacanciesReport} = this.props;
-    const {getReport} = this.props.pageActions;
+    const {getReports} = this.props.pageActions;
+    const {wordsReport, vacanciesReport, fetching} = this.props;
 
     let loadingTemplate;
 
-    if(this.props.vacanciesReport.fetching) {
+    if(fetching) {
       loadingTemplate = <div> Загрузка... </div>
     }
 
@@ -27,8 +31,13 @@ class App extends Component {
         <div className="loader">
           {loadingTemplate}
         </div>
-        <Report vacanciesReport={vacanciesReport} getReport={getReport} type='vacancies'/>
-        <Report vacanciesReport={vacanciesReport} getReport={getReport} type='words'/>
+
+        <header>
+          <button className="btn" onClick={::this.getReportBtnClick}> Перезагрузить </button>
+        </header>
+
+        <Report report={wordsReport} />
+        <Report report={vacanciesReport} />
       </div>
     );
   }
@@ -36,7 +45,9 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    vacanciesReport: state.vacanciesReport
+    wordsReport: state.reportsReducer.reports[WORDS_REPORT] ,
+    vacanciesReport: state.reportsReducer.reports[VACANCIES_REPORT],
+    fetching: state.reportsReducer.fetching
   }
 }
 

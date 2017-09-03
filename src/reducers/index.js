@@ -1,4 +1,4 @@
 import {combineReducers} from 'redux';
-import vacanciesReport from './report';
+import reportsReducer from './report';
 
-export default combineReducers({vacanciesReport});
+export default combineReducers({reportsReducer});

@@ -2,26 +2,20 @@ import React, {PropTypes, Component} from 'react';
 
 export default class Report extends Component {
 
-  getReportBtnClick(e) {
-    this.props.getReport(this.props.type);
-  }
-
   render() {
 
-    let report = this.props.vacanciesReport.reports[this.props.type];
+    let report = this.props.report;
+    console.log('report in render: ', report);
     let lines = [];
     let title = 'Первая загрузка';
 
-    if(report){
+    if(report) {
       lines = report.lines;
       title = report.title;
+      console.log('Report.render: ', report.lines.count);
     }
 
     return <div className="report">
-
-      <header>
-        <button className="btn" onClick={::this.getReportBtnClick}> Перезагрузить </button>
-      </header>
 
       <h3 className="report-header">{title}</h3>
 
@@ -46,6 +40,5 @@ export default class Report extends Component {
 }
 
 Report.propTypes = {
-  vacanciesReport: PropTypes.object.isRequired,
-  getReport: PropTypes.func.isRequired
+  report: PropTypes.object
 };
