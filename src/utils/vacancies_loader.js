@@ -6,49 +6,34 @@ import Meta from './meta';
 
 export class VacanciesLoader {
 
-  constructor(){
+  constructor() {
+    this.builder = BuilderFactory.getBuilder();
   }
 
   // Итератор по страницам вакансий
-  loadReport(name) {
+  loadReport() {
     let promiseResolver = (resolve, reject) => {
-      let builder = BuilderFactory.getBuilder(name);
-
-      this.fetchFirst().then( (response)=> { // получить первую с метаинформацией
-
-        builder.build( response.data.vacancies );
-        let meta = Meta.fromResponse(response);
-
-        console.log('pages: ', meta)
-
-        // обработать последовательно страницы по три (перезагрузить при ошибке)
-        // функция Promise.map из bluebird перейдет к следующему промису
-        // только после завершения then текущего промиса
-        Promise.map( 
-          meta.pages,
-          onePage => {
-              onePage.withRetry().then( result => 
-              { 
-                // meta.progress(onePage);
-                return builder.build(result.data.vacancies);
-              })
-            }, {concurrency: 1})
-          .then(res => {
-            resolve( builder.result() );
-          }
-        );
-
-      })
-      .catch((error)=> {
-        reject(error);
-      })
+      this.loadPage(1, resolve);
     }
 
     return new Promise(promiseResolver);
   }
 
-  fetchFirst(){
-    return ( new VacPage(0) ).withRetry();     
+  loadPage(num, callback) {
+    let vacPage = new VacPage(num);
+
+    vacPage.withRetry().then( result => 
+    {
+      if(result.isFinish) {
+        callback( this.builder.result() );
+      } else {
+        Meta.progress(vacPage);
+        this.builder.build(result.data.vacancies);
+
+        this.loadPage(num+1, callback);
+      }
+    });
+
   }
 
 }

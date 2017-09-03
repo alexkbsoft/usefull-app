@@ -9,7 +9,7 @@ export default class NetworkHelper {
         },
         params:{
           period: 'today',
-          page: page,
+          offset: (page-1)*100,
           limit: 100
         }
       }

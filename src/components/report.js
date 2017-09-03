@@ -5,34 +5,36 @@ export default class Report extends Component {
   render() {
 
     let report = this.props.report;
-    console.log('report in render: ', report);
     let lines = [];
-    let title = 'Первая загрузка';
+    let title = 'загрузка...';
 
     if(report) {
       lines = report.lines;
       title = report.title;
-      console.log('Report.render: ', report.lines.count);
     }
 
     return <div className="report">
 
-      <h3 className="report-header">{title}</h3>
 
-      <div className="table">
-        <div className="row">
-          <div className="col col1 th">Рубрики</div>
-          <div className="col col1 th">Кол-во</div>
-        </div>
+      <table className="table">
+      <caption className="report-header">{title}</caption>
+      <thead>
+        <tr>
+          <th className="col">Рубрики</th>
+          <th className="col">Кол-во</th>
+        </tr>
+      </thead>
+      <tbody>
         {
           lines.map(line =>
-            <div className="row">
-              <div className="col col1">{line.name}</div>
-              <div className="col col2">{line.count}</div>
-            </div>
+            <tr className="row">
+              <td className="col col1">{line.name}</td>
+              <td className="col col2">{line.count}</td>
+            </tr>
           )
         }
-      </div>
+      </tbody>
+      </table>
 
 
     </div>

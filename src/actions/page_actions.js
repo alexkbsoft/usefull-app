@@ -17,7 +17,6 @@ export function getReports() {
     //получаем вакансии и обрабатываем репорт-редюсером
     loader.loadReport().then(
       ( result ) => {
-        console.log('dispatch result: ', result);
         dispatch(
           {
             type: GET_REPORT_SUCCESS,

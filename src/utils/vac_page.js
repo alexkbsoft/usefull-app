@@ -16,24 +16,27 @@ export default class VacPage {
 ///
   fetch() {
     this.tryCount += 1;
-    console.log('fetching page:', this.pageStep);
     return NetworkHelper.get(this.pageStep).then(response => {
       this.success = true;
       return response;
-    }).catch(error => {
-
-      console.log('%c Ошибка на попытке %s', 'color: red', this.tryCount);
-      return {error:error};
+    }).catch(errResponse => {
+      return {errors: errResponse.response};
     });
   }
 
   retry(accept, reject) {
     if(this.tryCount < this.maxTryCount) {
       this.fetch().then(res => {
-        if(res.error) {
-          this.retry(accept, reject);
+        if(res.errors) {
+
+          let isFinish = this.analyzeError(res.errors);
+          if(isFinish) {
+            accept({isFinish})
+          } else {
+            console.log('%c Ошибка на попытке %s', 'color: red', this.tryCount);
+            setTimeout( ()=> this.retry(accept, reject), 2000);
+          }
         } else {
-          console.log('page success', this.pageStep);
           accept(res);
         }
       });
@@ -50,5 +53,19 @@ export default class VacPage {
     }
 
     return new Promise(resolver);
+  }
+
+  analyzeError(response) {
+    if(!response.data || !response.data.errors) {
+      return false;
+    }
+
+    let error400 = response.data.errors.find(elem => elem.code === 400);
+
+    if(error400 && error400.message === 'Offset out of bounds') {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

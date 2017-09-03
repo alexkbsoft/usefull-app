@@ -8,23 +8,11 @@ export default class Meta {
     this.pages = pages;
   }
 
-  static fromResponse(response) {
-    let meta = response.data.metadata.resultset;
-    let pagesCount = Math.floor(meta.count/meta.limit);
-    let pages = []
-
-    for (let step = 1; step < pagesCount; step++) {
-      pages.unshift( new VacPage(step) );
-    }
-
-    return new Meta(pages);
-  }
-
-  progress(page) {
+  static progress(page) {
     store.dispatch(
     {
       type: PROGRESS,
-      payload: Math.floor( 100 * page.pageStep / this.pages.length )
+      payload: page.pageStep
     });
   }
 }

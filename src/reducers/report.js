@@ -14,15 +14,12 @@ const TITLES = {
 export default function report(state = initialState, action) {
   switch (action.type) {
     case GET_REPORT_REQUEST:
-      return { ...state, fetching: true };
+      return { ...state, fetching: true, reports:{} };
 
     case PROGRESS:
-      console.log('progress: ', action.payload);
-      return { ...state, progress: action.payload };
+      return { ...state, percent: action.payload };
 
     case GET_REPORT_SUCCESS:
-      console.log('success in reducer: ', action.payload);
-
       return { ...state, reports:action.payload, fetching: false };
 
     default:

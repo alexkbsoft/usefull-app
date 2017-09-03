@@ -1,7 +1,7 @@
 import {VACANCIES_REPORT, WORDS_REPORT} from '../constants/report';
 
 export default class BuilderFactory {
-  static getBuilder(name) {
+  static getBuilder() {
     return new CompositeBuilder();
   }
 }
