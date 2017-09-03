@@ -12,27 +12,28 @@ export class VacanciesLoader {
 
   // Итератор по страницам вакансий
   loadReport() {
-    let promiseResolver = (resolve, reject) => {
-      this.loadPage(1, resolve);
-    }
+    let deferred = Promise.defer();
+    this.loadPage(1, deferred);
 
-    return new Promise(promiseResolver);
+    return deferred.promise;
   }
 
-  loadPage(num, callback) {
+  loadPage(num, deferred) {
     let vacPage = new VacPage(num);
 
     vacPage.withRetry().then( result => 
     {
       if(result.isFinish) {
-        callback( this.builder.result() );
+        deferred.resolve( this.builder.result() );
       } else {
         Meta.progress(vacPage);
         this.builder.build(result.data.vacancies);
 
-        this.loadPage(num+1, callback);
+        this.loadPage(num+1, deferred);
       }
     });
+
+    return deferred.promise;
 
   }
 
